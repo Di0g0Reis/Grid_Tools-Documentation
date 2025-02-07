@@ -37,16 +37,12 @@ class Network:
     def load_topology(self, filename):
         _load_topology(self, filename)
 
-    def construct_sheet_names(self, season, scenario):
-        sheet_names = _construct_sheet_names(season, scenario)
-        return sheet_names
-
-    def load_case(self, excel_file, sheet_names):
-        data = _load_case(self, excel_file, sheet_names)
+    def load_case(self, excel_file):
+        data = _load_case(self, excel_file)
         return data
 
-    def read_market_data(self, market_data_file, sheet_names, scenario):
-        _read_market_data(self, market_data_file, sheet_names, scenario)
+    def read_market_data(self, market_data_file):
+        _read_market_data(self, market_data_file)
 
 
 #=======================================================
@@ -177,29 +173,6 @@ def _load_topology(network, filename):
 #           Read Excel data, Scenarios
 #=======================================================
 
-def _construct_sheet_names(season, scenario):
-    """
-    Construct the sheet names based on the season and scenario.
-    """
-    prefix = {
-        'Winter': 'Winter',
-        'Spring': 'Spring',
-        'Summer': 'Summer',
-        'Fall': 'Fall'
-    }
-    return {
-        'Pc': f'Pc, {prefix[season]}, S{scenario}',
-        'Qc': f'Qc, {prefix[season]}, S{scenario}',
-        'Pg': f'Pg, {prefix[season]}, S{scenario}',
-        'Qg': f'Qg, {prefix[season]}, S{scenario}',
-        'UpFlex': f'UpFlex, {prefix[season]}',
-        'DownFlex': f'DownFlex, {prefix[season]}',
-        'GenStatus': f'GenStatus, {prefix[season]}',
-        'Cp': f'Cp, {prefix[season]}',
-        'Flex': f'Flex, {prefix[season]}'
-
-    }
-
 def _load_case(network, excel_file, sheet_names):
 
     network.operational_data_file = excel_file
@@ -224,9 +197,14 @@ def _load_case(network, excel_file, sheet_names):
     # Consumption and Generation data -- by scenario
     for i in range(len(network.prob_operation_scenarios)):
 
+        sheet_name_pc = f'Pc, {network.day}, S{i + 1}'
+        sheet_name_qc = f'Qc, {network.day}, S{i + 1}'
+        sheet_name_pg = f'Pg, {network.day}, S{i + 1}'
+        sheet_name_qg = f'Qg, {network.day}, S{i + 1}'
+
         # Consumption per scenario (active, reactive power)
-        pc_scenario = _get_consumption_flexibility_data_from_excel_file(excel_file, sheet_names["Pc"])
-        qc_scenario = _get_consumption_flexibility_data_from_excel_file(excel_file, sheet_names["Qc"])
+        pc_scenario = _get_consumption_flexibility_data_from_excel_file(excel_file, sheet_name_pc)
+        qc_scenario = _get_consumption_flexibility_data_from_excel_file(excel_file, sheet_name_qc)
         if not pc_scenario:
             print(f'[ERROR] Network {network.name}, {network.year}, {network.day}. No active power consumption data provided for scenario {i + 1}. Exiting...')
         if not qc_scenario:
@@ -237,8 +215,8 @@ def _load_case(network, excel_file, sheet_names):
         # Generation per scenario (active, reactive power)
         num_renewable_gens = network.get_num_renewable_gens()
         if num_renewable_gens > 0:
-            pg_scenario = _get_generation_data_from_excel_file(excel_file, sheet_names["Pg"])
-            qg_scenario = _get_generation_data_from_excel_file(excel_file, sheet_names["Qg"])
+            pg_scenario = _get_generation_data_from_excel_file(excel_file, sheet_name_pg)
+            qg_scenario = _get_generation_data_from_excel_file(excel_file, sheet_name_qg)
             if not pg_scenario:
                 print(f'[ERROR] Network {network.name}, {network.year}, {network.day}. No active power generation data provided for scenario {i + 1}. Exiting...')
             if not qg_scenario:
@@ -247,16 +225,16 @@ def _load_case(network, excel_file, sheet_names):
             data['generation']['qg'][i] = qg_scenario
 
     # Generators status. Note: common to all scenarios
-    data['generation']['status'] = _get_generator_status_from_excel_file(excel_file, sheet_names["GenStatus"])
+    data['generation']['status'] = _get_generator_status_from_excel_file(excel_file, f'GenStatus, {network.day}')
 
     # Flexibility data
-    flex_up_p = _get_consumption_flexibility_data_from_excel_file(excel_file, sheet_names["UpFlex"])
+    flex_up_p = _get_consumption_flexibility_data_from_excel_file(excel_file, f'UpFlex, {network.day}')
     if not flex_up_p:
         for load in network.loads:
             flex_up_p[load.load_id] = [0.0 for _ in range(network.num_instants)]
     data['flexibility']['upward'] = flex_up_p
 
-    flex_down_p = _get_consumption_flexibility_data_from_excel_file(excel_file, sheet_names["DownFlex"])
+    flex_down_p = _get_consumption_flexibility_data_from_excel_file(excel_file, f'DownFlex, {network.day}')
     if not flex_down_p:
         for load in network.loads:
             flex_down_p[load.load_id] = [0.0 for _ in range(network.num_instants)]
@@ -356,23 +334,25 @@ def _get_generator_status_from_excel_file(filename, sheet_name):
 #           Read Market data
 #=======================================================
 
-def _read_market_data(network, file_path, sheet_names, scenario):
+def _read_market_data(network, file_path):
     # Initialize variables to hold market data separately
+    n_scenarios = 1
+    cp = _get_cost_data_from_market_file(file_path, "Cp", n_scenarios, network.num_instants)
     Cp, Flex, prob_market_scenarios = None, None, None
 
     # Read the specified sheet for the given season
     try:
         # Load the entire Cp sheet and select the specific row for the scenario
-        Cp_data = pd.read_excel(file_path, sheet_name=sheet_names['Cp'])
+        Cp_data = pd.read_excel(file_path, sheet_name='Cp')
         Cp = Cp_data.iloc[scenario - 1]  # Adjusting for zero-based index
         network.cost_energy_p.append(Cp)
-        print(f"Successfully read Cp data from {sheet_names['Cp']} for scenario {scenario}")
+        print(f"Successfully read Cp data from Cp for scenario {scenario}")
 
         # Load the entire Flex sheet and select the specific row for the scenario
-        Flex_data = pd.read_excel(file_path, sheet_name=sheet_names['Flex'])
+        Flex_data = pd.read_excel(file_path, sheet_name='Flex')
         Flex = Flex_data.iloc[scenario - 1]  # Adjusting for zero-based index
         network.cost_flex.append(Flex)
-        print(f"Successfully read Flex data from {sheet_names['Flex']} for scenario {scenario}")
+        print(f"Successfully read Flex data from 'Flex' ")
 
         # Load the Probability of market (price) scenarios
         prob_data = pd.read_excel(file_path, sheet_name='Scenarios', header=None)
@@ -381,6 +361,22 @@ def _read_market_data(network, file_path, sheet_names, scenario):
         print(f"Successfully read Prob. data")
 
     except Exception as e:
-        print(f"Error reading {sheet_names['Cp']} or , {sheet_names['Flex']}, or Prob: {e}")
+        print(f"Error reading Cp or , Flex, or Prob: {e}")
 
     return network.cost_energy_p, network.cost_flex, network.prob_market_scenarios
+
+def _get_cost_data_from_market_file(file_path, sheet_name, n_scenarios, n_instants):
+
+    try:
+        excel_data = pd.read_excel(file_path, sheet_name=sheet_name)
+    except Exception as e:
+        print(f"Error reading cost data from {sheet_name}: {e}")
+
+    cost_data = dict()
+    for scenario in range(n_scenarios):
+        # Load the entire Cp sheet and select the specific row for the scenario
+        cost_data[scenario] = list()
+        for n in range(n_instants):
+            cost_data[scenario].append(excel_data.iloc[scenario - 1, n_instants - 1])
+
+    return cost_data
