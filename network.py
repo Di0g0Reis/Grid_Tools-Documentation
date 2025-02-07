@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 from node import Node
 from load import Load
 from branch import Branch
@@ -6,9 +7,8 @@ from generator import Generator
 from capacitor_bank import CapacitorBank
 from energy_storage import EnergyStorage
 from network_parameters import NetworkParameters
-import pandas as pd
 from helper_functions import *
-
+from definitions import *
 
 
 class Network:
@@ -186,37 +186,64 @@ def _read_operational_data(network, filename):
 
         # Consumption per scenario (active, reactive power)
         pc_scenario = _get_consumption_flexibility_data_from_excel_file(filename, sheet_name_pc)
-        qc_scenario = _get_consumption_flexibility_data_from_excel_file(filename, sheet_name_qc)
         if not pc_scenario:
-            print(f'[ERROR] Network {network.name}, {network.year}, {network.day}. No active power consumption data provided for scenario {i + 1}. Exiting...')
-        if not qc_scenario:
-            print(f'[ERROR] Network {network.name}, {network.year}, {network.day}. No reactive power consumption data provided for scenario {i + 1}. Exiting...')
-        data['consumption']['pc'][i] = pc_scenario
-        data['consumption']['qc'][i] = qc_scenario
+            print(f'[ERROR] Network {network.name}. No active power consumption data provided for scenario {i + 1}. Exiting...')
+            exit(ERROR_OPERATIONAL_DATA_FILE)
 
-        # Generation per scenario (active, reactive power)
-        num_renewable_gens = network.get_num_renewable_gens()
-        if num_renewable_gens > 0:
-            pg_scenario = _get_generation_data_from_excel_file(excel_file, sheet_name_pg)
-            qg_scenario = _get_generation_data_from_excel_file(excel_file, sheet_name_qg)
-            if not pg_scenario:
-                print(f'[ERROR] Network {network.name}, {network.year}, {network.day}. No active power generation data provided for scenario {i + 1}. Exiting...')
-            if not qg_scenario:
-                print(f'[ERROR] Network {network.name}, {network.year}, {network.day}. No reactive power generation data provided for scenario {i + 1}. Exiting...')
-            data['generation']['pg'][i] = pg_scenario
-            data['generation']['qg'][i] = qg_scenario
+        qc_scenario = _get_consumption_flexibility_data_from_excel_file(filename, sheet_name_qc)
+        if not qc_scenario:
+            print(f'[ERROR] Network {network.name}. No reactive power consumption data provided for scenario {i + 1}. Exiting...')
+            exit(ERROR_OPERATIONAL_DATA_FILE)
+
+        # Update loads
+        for load in network.loads:
+
+            # Pc
+            if load.load_id not in pc_scenario:
+                print(f'[WARNING] Load {load.load_id} does not have Pc!')
+                load.pd = [0.00 for _ in range(network.num_instants)]
+            else:
+                load.pd = [pc /network.baseMVA for pc in pc_scenario[load.load_id]]
+
+            # Qc
+            if load.load_id not in qc_scenario:
+                print(f'[WARNING] Load {load.load_id} does not have Qc!')
+                load.qd = [0.00 for _ in range(network.num_instants)]
+            else:
+                load.qd = [qc /network.baseMVA for qc in qc_scenario[load.load_id]]
+
+    # Flexibility
+    flex_up_p = _get_consumption_flexibility_data_from_excel_file(filename, f'UpFlex')
+    if not flex_up_p:
+        print(f'[ERROR] Network {network.name}. No upward flexibility data provided for scenario. Exiting...')
+        exit(ERROR_OPERATIONAL_DATA_FILE)
+
+    flex_down_p = _get_consumption_flexibility_data_from_excel_file(filename, f'DownFlex')
+    if not flex_down_p:
+        print(f'[ERROR] Network {network.name}. No downward flexibility data provided for scenario. Exiting...')
+        exit(ERROR_OPERATIONAL_DATA_FILE)
+
+    if load.load_id not in flex_up_p:
+        print(f'[WARNING] Load {load.load_id} does not have upward flexibility!')
+        load.flexibility.upward = [0.00 for _ in range(network.num_instants)]
+    else:
+        load.flexibility.upward = [flex_up / network.baseMVA for flex_up in range(network.num_instants)]
+
+    if load.load_id not in flex_down_p:
+        print(f'[WARNING] Load {load.load_id} does not have downward flexibility!')
+        load.flexibility.downward = [0.00 for _ in range(network.num_instants)]
+    else:
+        load.flexibility.downward = [flex_down / network.baseMVA for flex_down in range(network.num_instants)]
 
     # Generators status. Note: common to all scenarios
     data['generation']['status'] = _get_generator_status_from_excel_file(excel_file, f'GenStatus, {network.day}')
 
     # Flexibility data
-    flex_up_p = _get_consumption_flexibility_data_from_excel_file(excel_file, f'UpFlex, {network.day}')
     if not flex_up_p:
         for load in network.loads:
             flex_up_p[load.load_id] = [0.0 for _ in range(network.num_instants)]
     data['flexibility']['upward'] = flex_up_p
 
-    flex_down_p = _get_consumption_flexibility_data_from_excel_file(excel_file, f'DownFlex, {network.day}')
     if not flex_down_p:
         for load in network.loads:
             flex_down_p[load.load_id] = [0.0 for _ in range(network.num_instants)]
@@ -248,6 +275,7 @@ def _get_consumption_flexibility_data_from_excel_file(filename, sheet_name):
 
     return processed_data
 
+
 def _get_generation_data_from_excel_file(filename, sheet_name):
 
     try:
@@ -270,6 +298,7 @@ def _get_generation_data_from_excel_file(filename, sheet_name):
         processed_data = {}
 
     return processed_data
+
 
 def _get_generator_status_from_excel_file(filename, sheet_name):
 
