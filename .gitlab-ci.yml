@@ -2,7 +2,6 @@ pages:
   stage: deploy
   image: python:latest
   script:
-    - call C:\Users\reis7\anaconda3\Scripts\activate.bat base
     - pip install mkdocs-material
     - mkdocs build --site-dir public
   cache:
