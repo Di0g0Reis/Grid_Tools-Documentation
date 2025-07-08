@@ -1,0 +1,89 @@
+# yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
+site_name: Grid Operations tools Documentation
+site_url: https://SC-OPF.inesctec.pt
+repo_url: https://gitlab.inesctec.pt/diogo.a.reis/grid_management_tools/-/tree/mpopf_corrections?ref_type=heads
+
+# Navigation
+nav:
+  - About this Project:
+      - About: about.md
+      - Authors: authors.md
+  - Getting Started: getting_started.md
+  - Datastructures and Elements:
+      - Datastructures and Elements: elements.md
+      - Topology of the electrical grid: topology.md
+      - Configuration parameters: config_params.md
+      - Production and Consumption data: prod_cons.md
+      - Market data: market.md
+      - Execution File: directory.md
+  - Optimal Power Flow (OPF):
+      - OPF: opf.md
+      - Multi-Period Optimal Power Flow: mp_opf.md
+      - Security-Constrained Optimal Power Flow: sc_opf.md
+
+# Theme
+theme:
+  name: material
+  font:
+    text: Merriweather Sans
+    code: Red Hat Mono
+  logo: assets/INESCTEC_logo_mono_BLK.png
+  favicon: assets/INESCTEC_ICON.png
+  features:
+    - navigation.footer
+    - navigation.indexes
+    - navigation.tabs.sticky
+    - navigation.top
+  palette:
+  # Dark mode
+  - scheme: slate
+    toggle:
+      icon: material/weather-sunny
+      name: Dark mode
+    primary: blue
+    accent: deep purple
+
+  # Light mode
+  - scheme: default
+    toggle:
+     icon: material/weather-night
+     name: Light mode
+    primary: orange
+    accent: blue
+
+# Extensions
+markdown_extensions:
+  - tables
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: _span
+      pygments_lang_class: true
+  - pymdownx.inlinehilite:
+  - pymdownx.snippets:
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - admonition
+  - pymdownx.details
+
+# Extras
+extra:
+  social:
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/inesc-tec/posts/?feedView=all
+    - icon: fontawesome/solid/globe
+      link: https://www.inesctec.pt/pt#intro
+
+
+copyright: Copyright &copy; 2025 INESCTEC
+extra_css:
+  - stylesheets/extra.css
+
