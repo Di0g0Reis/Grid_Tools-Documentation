@@ -2,7 +2,7 @@ pages:
   stage: deploy
   image: python:3.11
   tags:
-    - shell
+    - docker
   script:
     - pip install mkdocs-material
     - mkdocs build --site-dir public
