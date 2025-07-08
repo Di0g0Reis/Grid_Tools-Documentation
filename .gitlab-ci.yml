@@ -1,6 +1,6 @@
 pages:
   stage: deploy
-  image: python:latest
+  image: python:3.11
   script:
     - pip install mkdocs-material
     - mkdocs build --site-dir public
