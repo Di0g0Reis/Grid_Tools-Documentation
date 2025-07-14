@@ -58,7 +58,26 @@ In short, you will need to provide the following parameters:
 |    Vg     |   float   | Voltage magnitude setpoint (p.u.)                          |
 |  status   |  integer  | Status: 1 - Machine in service; 0 - Machine out of service |
 |   type    |  string   | Type of generator: Conv, Wind, Solar, etc                  |
-| ramp_rate |   float   | Physical Ramp rate (deltaMW/MW)                            |
+| ramp_rate |   float   | Physical Ramp rate (P/min)                                 |
+
+!!! info 
+    Based on our investigation, we obtained ramp rate values corresponding to each generator type.
+    
+    | Generator - Fuel Type | Ramp rate (% P/min) | 
+    |:---------:|:---------:|
+    |  Coal  |  1 - 4  | 
+    |    Coal - **SOTA**    |  < 6  | 
+    |  Hydro   |  10 - 30  |
+    |  **Open Cycle** gas turbines   |  8 - 12  |
+    |  **Open Cycle** gas turbines - **SOTA**  |  < 15  | 
+    |  **Combined Cycle** gas turbines   |  2 - 4  |
+    |  **Combined Cycle** gas turbines - **SOTA**  |  8 - 10  |
+    |  Thermal (Poland)   |  2 - 6  |
+    |  Thermal (Denmark)   |  4  |
+    |  Thermal (Germany)   |  < 6  |
+    |  Nuclear   |  100  |
+    
+    With **SOTA** meaning State of the art.
 
 
 ####  **Loads**:
@@ -84,7 +103,7 @@ In short, you will need to provide the following parameters:
 |  rating   |   float   | Rating A (MVA, long term rating)                     |
 |  status   |  integer  | Status: 1 - Line in service; 0 - Line out of service |
 
-!!! success "Title of callout"
+!!! info
 
     The **ramp rate** which defines how much the capacity limits of branches increase under contingency conditions is set to **15% for lines** and **20% for transformers**. These values are configured in the ``branch.py`` file.
 
