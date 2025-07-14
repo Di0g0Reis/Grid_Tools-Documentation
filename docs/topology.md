@@ -77,7 +77,7 @@ In short, you will need to provide the following parameters:
     |  Thermal (Germany)   |  < 6  |
     |  Nuclear   |  100  |
     
-    With **SOTA** meaning State of the art.
+    With **SOTA** being State of the art.
 
 
 ####  **Loads**:
