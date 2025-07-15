@@ -10,18 +10,6 @@ Here, you will find comprehensive documentation about the project, including tec
 
 If you have questions or suggestions, feel free to reach out to us through our respective channels at INESC TEC.
 
-## Topics
-This website is broken down into the following topics:
-=== "Topics"
-
-    * [About this project](about.md)
-    * [Getting Started](getting_started.md)
-    * [Datastructure and Elements](elements.md)
-    * [Muiti-Period Optimal Power Flow](mp_opf.md)
-    * [Security-Constrained Optimal Power Flow](sc_opf.md)
-
-
-
 
 
 Thank you for visiting!
