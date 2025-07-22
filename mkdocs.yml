@@ -5,6 +5,7 @@ repo_url: https://gitlab.inesctec.pt/diogo.a.reis/grid_management_tools/-/tree/m
 
 # Navigation
 nav:
+  - index.md
   - About this Project:
       - About: about.md
       - Authors: authors.md
