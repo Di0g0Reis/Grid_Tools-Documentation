@@ -1,6 +1,6 @@
 # yaml-language-server: $schema=https://squidfunk.github.io/mkdocs-material/schema.json
 site_name: Grid Operations tools Documentation
-site_url: https://di0g0reis.github.io/Grid_Tools-Documentation/
+site_url: https://sitename.example
 repo_url: https://gitlab.inesctec.pt/diogo.a.reis/grid_management_tools/-/tree/mpopf_corrections?ref_type=heads
 
 # Navigation
