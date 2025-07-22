@@ -17,12 +17,12 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 
 	"contingencies": {
 		"lines": {
-			"status": true,
-			"branch_id": [8,6,5]
+			"status": false,
+			"branch_id": [9, 149]
 		},
 		"generators": {
 			"status": true,
-			"gen_id": [2, 1, 3, 4]
+			"gen_id": [41]
 		}
 	},
 
@@ -44,11 +44,15 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 			"charging": false,
 			"day_balance": false
 		},
+		"conventional_generation": {
+			"reactive": true,
+			"active": true
+		},
 		"node_balance": false
 	},
 	"solver": {
 		"name": "ipopt",
-		"solver_tol": 1e-5,
+		"solver_tol": 1e-6,
 		"verbose": true
 	},
 	"print_to_screen": false,
@@ -85,10 +89,11 @@ Inside the ***slacks*** parameter resides the following:
 
 #### **Slacks**:
 
-|   Parameter    | Data Type | Explanation                                                                                                                                                                                                                                                                        |
-|:--------------:|:---------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| grid_operation |  boolean  | Enables/Disables Voltage limit violations and/or Branch flow limit violations                                                                                                                                                                                                      |
-|  flexibility   |  boolean  | Enables/Disables daily energy balancing for flexible resources                                                                                                                                                                                                                     |
-|      ess       |  boolean  | Enables/Disables the relaxation of **complementarity** constraints, which softens the strict "charge OR discharge" rule; the relaxation of constraints related to **charging** limits; and/or the relaxation of **daily energy balance** constraints in **energy storage systems** |
-|   shared_ess   |  boolean  | Same logic as above, but for **shared energy storage systems**                                                                                                                                                                                                                     |
-|  node_balance  |  boolean  | Enables/Disables softening nodal power balance constraints, helpful for feasibility testing                                                                                                                                                                                        |
+|        Parameter         | Data Type | Explanation                                                                                                                                                                                                                                                                        |
+|:------------------------:|:---------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+|      grid_operation      |  boolean  | Enables/Disables Voltage limit violations and/or Branch flow limit violations                                                                                                                                                                                                      |
+|       flexibility        |  boolean  | Enables/Disables daily energy balancing for flexible resources                                                                                                                                                                                                                     |
+|           ess            |  boolean  | Enables/Disables the relaxation of **complementarity** constraints, which softens the strict "charge OR discharge" rule; the relaxation of constraints related to **charging** limits; and/or the relaxation of **daily energy balance** constraints in **energy storage systems** |
+|        shared_ess        |  boolean  | Same logic as above, but for **shared energy storage systems**                                                                                                                                                                                                                     |
+| conventional_generation  |  boolean  | Allows some flexibility in the active/reactive power of conventional generators                                                                                                                                                                                                    |
+|       node_balance       |  boolean  | Enables/Disables softening nodal power balance constraints, helpful for feasibility testing                                                                                                                                                                                        |
