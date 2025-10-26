@@ -130,6 +130,7 @@ In short, you will need to provide the following parameters:
 |  status   |  integer  | Status: 1 - Line in service; 0 - Line out of service                                                                                     |
 | vmag_reg  |  integer  | Indicates if transformer has voltage magnitude regulation (1 - If it does)                                                               |
 
+
 #### **Energy Storage Systems**:
 
 | Parameter | Data Type | Explanation                                                                                                      |
