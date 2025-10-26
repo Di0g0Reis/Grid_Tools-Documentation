@@ -27,6 +27,10 @@ This is exemplified here:
     "transformers": [
         {"branch_id": 3, "fbus": 37, "tbus": 22, "r": 6e-05, "x": 0.00046, "b": 0.0, "rating": 2500.0, "ratio": 1.0082, "status": 1, "vmag_reg": 1},
         ...
+    ],
+  	"energy_storage": [
+		{"es_id": 1, "bus": 1, "s": 10, "e": 20, "e_init": 10, "e_min": 1, "e_max": 19, "eff_ch": 0.9, "eff_dch": 0.9, "max_pf": 0.9, "min_pf": -0.9},
+        ...
     ]
 }
 ````
@@ -125,3 +129,19 @@ In short, you will need to provide the following parameters:
 |   ratio   |   float   | Transformer off nominal turns ratio ( = 0 for lines; taps at 'from' bus, impedance at 'to' bus, i.e. if r = x = 0, then ratio = Vf / Vt) |
 |  status   |  integer  | Status: 1 - Line in service; 0 - Line out of service                                                                                     |
 | vmag_reg  |  integer  | Indicates if transformer has voltage magnitude regulation (1 - If it does)                                                               |
+
+#### **Energy Storage Systems**:
+
+| Parameter | Data Type | Explanation                                                                                                      |
+|:---------:|:---------:|:-----------------------------------------------------------------------------------------------------------------|
+|   es_id   |  integer  | Energy storage identifier                                                                                        |
+|    bus    |  integer  | The bus (node) number in the power network to which the storage unit is connected                                |
+|     s     |   float   | Apparent power rating (MVA)                                                                                      |
+|     e     |   float   | Total energy capacity of the storage device (MWh)                                                                |
+|  e_init   |   float   | Initial energy stored at the beginning of the simulation (MWh)                                                   |
+|   e_min   |   float   | Minimum allowable energy (MWh)                                                                                   |
+|   e_max   |   float   | Maximum allowable energy, often 95% of e (MWh)                                                                   |
+|  eff_ch   |   float   | Charging efficiency (0 to 1, fraction of input power converted to stored energy)                                 |
+|  eff_dch  |   float   | Discharging efficiency (0 to 1, fraction of stored energy converted to output power)                             |
+|  max_pf   |   float   | Maximum power factor (leading/lagging) allowed when operating — defines reactive power capability limit (0 to 1) |
+|  min_pf   |   float   | Minimum power factor (0 to 1)                                                                                    |

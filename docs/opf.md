@@ -26,3 +26,5 @@ The results file contains multiple sheets, starting with the ``main`` sheet, whi
 | Transformer Ratio |   float   | **Transformer Ratio** of each transformer                                                    |
 |  Branch Loading   |   float   | Refers to how much of the **branch's capacity** is being used in a certain direction         |
 |    Power Flows    |   float   | **Power Flow** results in each branch per scenario and period                                |
+|  Energy Storage   |   float   | **Energy Storage units** results through out every period for each scenario                  |
+| Relaxation Slacks |   float   | **Relaxation Slacks** used and there respected values                                        |

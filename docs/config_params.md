@@ -39,11 +39,6 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 			"charging": false,
 			"day_balance": false
 		},
-		"shared_ess": {
-			"complementarity": true,
-			"charging": false,
-			"day_balance": false
-		},
 		"conventional_generation": {
 			"reactive": true,
 			"active": true
@@ -94,6 +89,5 @@ Inside the ***slacks*** parameter resides the following:
 |      grid_operation      |  boolean  | Enables/Disables Voltage limit violations and/or Branch flow limit violations                                                                                                                                                                                                      |
 |       flexibility        |  boolean  | Enables/Disables daily energy balancing for flexible resources                                                                                                                                                                                                                     |
 |           ess            |  boolean  | Enables/Disables the relaxation of **complementarity** constraints, which softens the strict "charge OR discharge" rule; the relaxation of constraints related to **charging** limits; and/or the relaxation of **daily energy balance** constraints in **energy storage systems** |
-|        shared_ess        |  boolean  | Same logic as above, but for **shared energy storage systems**                                                                                                                                                                                                                     |
 | conventional_generation  |  boolean  | Allows some flexibility in the active/reactive power of conventional generators                                                                                                                                                                                                    |
 |       node_balance       |  boolean  | Enables/Disables softening nodal power balance constraints, helpful for feasibility testing                                                                                                                                                                                        |
