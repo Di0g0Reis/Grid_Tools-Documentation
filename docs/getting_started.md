@@ -30,24 +30,24 @@ You can also install it with pip:
 ```
 pip install cyipopt
 ```
-To use IPOPT you will also need to create an environment variable with its location.
+To use IPOPT you will also need to create a `.env` file with the `ipopt.exe` file location.
 To find the corresponding location, run the following code in the anaconda prompt:
 ```commandline
 where ipopt
 ```
-It will return the location of IPOPT, copy that location as it is essential to create the environment variable. Simply search for environment variable when clicking the Windows button.
-it should show something like this:
-![environment variable](assets/environment_variable.png)
-Then, by pressing Edit ("Editar" in portuguese), you can create your environment variable.
-![edit_variable](assets/edit_variable.png)
-All you need to do is add the variable IPOPTDIR, with its corresponding location.
-![location](assets/location.png)
+It will return the location of IPOPT, copy that location as it is essential to create the file. 
+Simply create a new file on your IDE at the same level of the main code that you are going to run with the name `.env`. It should look something like this:
+````title=".env"
+IPOPTDIR=C:\Path_to_ipopt_exe_file\ipopt.exe
+LINEAR_SOLVER=ma97
+````
 
 !!! tip "Recommendation"
 
     We recommend using the [HSL solvers](https://licences.stfc.ac.uk/product/coin-hsl) from UK Research and Innovation, because they are much faster. However, to access them, you need to submit a request with a justification. After approval, you’ll receive a set of packages to download, along with a README file that guides you through the installation process.
 
-
-With this you are now ready to compile the code! If you don't have it, then here is how you can get access to it.
-### Download the code
-You can download the code from GitLab or GitHub. There, you’ll find all the auxiliary code and data sources for the various test cases. To run a specific case, you only need to modify the `main.py` file and the corresponding input data files (`.json` and `.xlsx`). For details on how each function works, refer to the [Multi-Period Optimal Power Flow](mp_opf.md) and [Security-Constrained Optimal Power Flow](sc_opf.md) modules.
+After this, you will need the entry files (grid files) for the code to read. For this step you should read the [Datastructures and Elements](elements.md) section.
+With this, you are now ready to compile the SCOPF Package! If you don't have it, then here is how you can get access to it.
+### Download the SCOPF Package
+You can download the SCOPF Package from GitLab. There, you’ll find all the auxiliary code and data sources for the various test cases. To run a specific case, you only need to modify the `main.py` file and the corresponding input data file (`.json`) and operation that you want to do ("SC" or "MP").
+For details on how each function works, refer to the [Multi-Period Optimal Power Flow](mp_opf.md) and [Security-Constrained Optimal Power Flow](sc_opf.md) modules.

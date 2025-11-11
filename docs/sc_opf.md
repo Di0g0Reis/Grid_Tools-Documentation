@@ -5,25 +5,14 @@ This approach is essential for maintaining system reliability and stability, esp
 In this section, you will learn how to set up and execute SC-OPF analyses, define contingency cases, interpret the results, and understand the trade-offs between cost optimization and system security.
 
 
-````py title="main.py" linenums="10" hl_lines="4 11"
+````py title="main.py"
+from SCOPF_Package import run_case_study
+
 if __name__ == "__main__":
 
-    case_study = CaseStudy()
-    case_study.read_data('CS2')
-
-
-    # mpopf - multiple period OPF
-    #case_study.run_mpopf()
-
-    # scopf - security constraint OPF
-    #case_study.run_scopf()
+    run_case_study("CS2", "SC")
 ````
 
-As shown in the code block above, you need to modify the scenario file on line 13 to match the specific case you want to analyze in this example, it’s ``CS2.json``. This is the execution file referenced [here](directory.md).
+As shown in the code block above, you need to modify the scenario file to match the specific case you want to analyze in this example, it’s ``CS2.json``. This is the execution file referenced [here](directory.md).
 
-Next, enable the type of OPF you want to solve by uncommenting the corresponding line. For solving the Security-Constrained OPF (SC-OPF), uncomment line 20.
-
-
-!!! warning 
-
-    **Do not** uncomment both line 17 and line 20 simultaneously. Attempting to solve both OPF types at the same time may result in inaccurate or inconsistent results.
+Next, enable the type of OPF you want to solve by writing "SC" in the operation spot for solving the Security-Constrained OPF (SCOPF).

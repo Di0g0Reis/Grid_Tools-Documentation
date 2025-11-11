@@ -4,25 +4,14 @@ In this section, you will learn how to set up and run MP-OPF simulations and und
 
 After having the correct files in the [Execution file](directory.md), all you need to do is make the proper changes to the ``main.py`` file.
 
-````py title="main.py" linenums="10" hl_lines="4 8"
+````py title="main.py"
+from SCOPF_Package import run_case_study
+
 if __name__ == "__main__":
 
-    case_study = CaseStudy()
-    case_study.read_data('CS2')
-
-
-    # mpopf - multiple period OPF
-    #case_study.run_mpopf()
-
-    # scopf - security constraint OPF
-    #case_study.run_scopf()
+    run_case_study("CS2", "MP")
 ````
 
-As shown in the code block above, you need to modify the scenario file on line 13 to match the specific case you want to analyze in this example, it’s ``CS2.json``. This is the execution file referenced [here](directory.md).
+As shown in the code block above, you need to modify the scenario file to match the specific case you want to analyze in this example, it’s ``CS2.json``. This is the execution file referenced [here](directory.md).
 
-Next, enable the type of OPF you want to solve by uncommenting the corresponding line. For solving the Multi-Period OPF (MP-OPF), uncomment line 17.
-
-
-!!! warning 
-
-    **Do not** uncomment both line 17 and line 20 simultaneously. Attempting to solve both OPF types at the same time may result in inaccurate or inconsistent results.
+Next, enable the type of OPF you want to solve by writing "MP" in the operation spot for solving the Multi-Period OPF (MP-OPF).
