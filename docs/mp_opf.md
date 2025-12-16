@@ -5,7 +5,7 @@ In this section, you will learn how to set up and run MP-OPF simulations and und
 After having the correct files in the [Execution file](directory.md), all you need to do is make the proper changes to the ``main.py`` file.
 
 ````py title="main.py"
-from SCOPF_Package import run_case_study
+from grid_management_tools import run_case_study
 
 if __name__ == "__main__":
 

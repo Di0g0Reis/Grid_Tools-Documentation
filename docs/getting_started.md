@@ -49,5 +49,5 @@ LINEAR_SOLVER=ma97
 After this, you will need the entry files (grid files) for the code to read. For this step you should read the [Datastructures and Elements](elements.md) section.
 With this, you are now ready to compile the SCOPF Package! If you don't have it, then here is how you can get access to it.
 ### Download the SCOPF Package
-You can download the SCOPF Package from GitLab. There, you’ll find all the auxiliary code and data sources for the various test cases. To run a specific case, you only need to modify the `main.py` file and the corresponding input data file (`.json`) and operation that you want to do ("SC" or "MP").
+You can download the SCOPF Package (Grid Management Tools) from GitLab. There, you’ll find all the auxiliary code and data sources for the various test cases. To run a specific case, you only need to modify the `main.py` file and the corresponding input data file (`.json`) and operation that you want to do ("SC" or "MP").
 For details on how each function works, refer to the [Multi-Period Optimal Power Flow](mp_opf.md) and [Security-Constrained Optimal Power Flow](sc_opf.md) modules.
