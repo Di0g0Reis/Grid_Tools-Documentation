@@ -7,9 +7,7 @@ After having the correct files in the [Execution file](directory.md), all you ne
 ````py title="main.py"
 from grid_management_tools import run_case_study
 
-if __name__ == "__main__":
-
-    run_case_study("CS2", "MP")
+run_case_study("CS2", "MP")
 ````
 
 As shown in the code block above, you need to modify the scenario file to match the specific case you want to analyze in this example, it’s ``CS2.json``. This is the execution file referenced [here](directory.md).
