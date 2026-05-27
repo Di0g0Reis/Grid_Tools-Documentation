@@ -29,7 +29,7 @@ This is exemplified here:
         ...
     ],
   	"energy_storage": [
-		{"es_id": 1, "bus": 1, "s": 10, "e": 20, "e_init": 10, "e_min": 1, "e_max": 19, "eff_ch": 0.9, "eff_dch": 0.9, "max_pf": 0.9, "min_pf": -0.9},
+		{"es_id": 1, "bus": 1, "s": 10, "e": 20, "e_init": 10, "e_min": 1, "e_max": 19, "eff_ch": 0.95, "eff_dch": 0.95, "max_pf": 0.9, "min_pf": -0.9},
         ...
     ]
 }
