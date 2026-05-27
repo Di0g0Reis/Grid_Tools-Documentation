@@ -1,6 +1,6 @@
 Copyright &copy; 2025 INESCTEC, this project was developed by the following members.
 
-### Members:
+### Members
 Our team consists of:
 
 [Diogo André Costa Reis](https://www.linkedin.com/in/diogo-reis-3754231a5/)
