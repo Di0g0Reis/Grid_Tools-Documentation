@@ -1,6 +1,8 @@
-This section provides an overview of the data structures and files required to run the SC-OPF (Security-Constrained Optimal Power Flow) and MP-OPF (Multi Period Optimal Power Flow) solvers. Each of the following subpages describes a specific input file, its purpose, structure, and the required information to ensure a proper execution of the optimization routines.
+This section provides an overview of the data structures and files required to run the OPF and SC-OPF frameworks.
+Each of the following subpages describes a specific input file, its purpose, structure, and the required information to ensure a proper execution of the optimization routines.
 The required files are:
-=== "Files"
+
+=== "Input Files"
 
     * [Topology of the electrical grid](topology.md)
     * [Configuration parameters](config_params.md)
@@ -10,4 +12,4 @@ The required files are:
 
 Each subpage in this section explains how to create and structure these files properly, detailing the required fields, data formats, and any important considerations.
 
-By the end of this section, you should have a complete understanding of the required datasets and how to prepare them for successful execution of both solvers.
+By the end of this section, you should have a complete understanding of the required datasets and how to prepare them for successful execution of both frameworks.
