@@ -7,52 +7,43 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 ````json title="caseX_params.json"
 {
 	"obj_type": "COST",
-	"transf_reg": false,
-	"es_reg": false,
-	"fl_reg": false,
+	"transf_reg": true,
+	"cb_reg": true,
+	"reactor_reg": true,
+	"es_reg": true,
+	"fl_reg": true,
 	"rg_curt": true,
 	"l_curt": false,
 	"enforce_vg": false,
+	"enforce_discrete": false,
 	"branch_limit_type": "APPARENT_POWER",
-
-	"contingencies": {
-		"lines": {
-			"status": false,
-			"branch_id": [9, 149]
-		},
-		"generators": {
-			"status": true,
-			"gen_id": [41]
-		}
-	},
-
+	"ess_model": "BILINEAR_RELAXATION",
 	"slacks": {
 		"grid_operation": {
 			"voltage": true,
-			"branch_flow": true
+			"branch_flow": false
 		},
 		"flexibility": {
 			"day_balance": false
 		},
 		"ess": {
-			"complementarity": true,
-			"charging": false,
 			"day_balance": false
 		},
-		"conventional_generation": {
-			"reactive": true,
-			"active": true
-		},
-		"node_balance": false
+		"node_balance": {
+			"active_power": false,
+			"reactive_power": false
+		}
 	},
 	"solver": {
 		"name": "ipopt",
-		"solver_tol": 1e-6,
-		"verbose": true
-	},
-	"print_to_screen": false,
-	"plot_diagram": false,
-	"print_results_to_file": false
+		"verbose": false,
+		"options": {
+	  		"tol": 1e-5,
+			"linear_solver": "ma97",
+			"output_file": "optim_log.log",
+			"file_print_level": 6
+		}
+	}
 }
 ````
 
@@ -63,18 +54,18 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 |:-----------------------:|:---------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------|
 |        obj_type         |     string      | Sets the objective function to: "COST" - minimize total operational cost or "CONGESTION_MANAGEMENT" - managing congestion in the power network |
 |       transf_reg        |     boolean     | Enables/Disables tap-changing transformer regulation as part of the optimization                                                               |
+|         cb_reg          |     boolean     | Enables/Disables tap-changing capacitor bank regulation as part of the optimization                                                            |
+|       reactor_reg       |     boolean     | Enables/Disables tap-changing reactor regulation as part of the optimization                                                                   |
 |         es_reg          |     boolean     | Enables/Disables energy storage regulation, i.e., storage devices won't be optimized actively                                                  |
 |         fl_reg          |     boolean     | Enables/Disables flexible loads from participating in the optimization                                                                         |
 |         rg_curt         |     boolean     | Allows (or not) renewable generation curtailment, giving the model flexibility to reduce excess renewables                                     |
 |         l_curt          |     boolean     | Enables/Disables load curtailment (load shedding) all demand must be met                                                                       |
 |       enforce_vg        |     boolean     | Enforces (or not) variable generation (e.g., solar/wind) to strictly follow forecast                                                           |
-|    branch_limit_type    |     string      | Line flow limits are enforced based on, current (A),  apparent power (MVA) or Mixed                                                            |
-|      contingencies      | boolean/integer | This section defines contingency events/scenarios where elements (like lines or generators) fail                                               |
+|    enforce_discrete     |     boolean     | Enforces (or not) variables to be discrete                                                                                                     |
+|    branch_limit_type    |     string      | Line flow limits are enforced based on, CURRENT (A) (or CURRENT_SIMPLIFIED),  APPARENT_POWER (MVA) or MIXED                                    |
+|        ess_model        |     string      | ESS model can vary from: EXACT, BILINEAR_RELAXATION or SIMPLIFIED                                                                              |
 | [***slacks***](#slacks) |     boolean     | This section controls where soft constraints (i.e., constraint violations with penalties) are allowed                                          |
 |         solver          | boolean/string  | Indicates the solvers settings                                                                                                                 |
-|     print_to_screen     |     boolean     | Enables/Disables output display in the console                                                                                                 |
-|      plot_diagram       |     boolean     | Enables/Disables graphical plotting of the power system                                                                                        |
-|  print_results_to_file  |     boolean     | Enables/Disables saving results to external files                                                                                              |
 
 !!! note 
 
@@ -84,10 +75,9 @@ Inside the ***slacks*** parameter resides the following:
 
 #### **Slacks**:
 
-|        Parameter         | Data Type | Explanation                                                                                                                                                                                                                                                                        |
-|:------------------------:|:---------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-|      grid_operation      |  boolean  | Enables/Disables Voltage limit violations and/or Branch flow limit violations                                                                                                                                                                                                      |
-|       flexibility        |  boolean  | Enables/Disables daily energy balancing for flexible resources                                                                                                                                                                                                                     |
-|           ess            |  boolean  | Enables/Disables the relaxation of **complementarity** constraints, which softens the strict "charge OR discharge" rule; the relaxation of constraints related to **charging** limits; and/or the relaxation of **daily energy balance** constraints in **energy storage systems** |
-| conventional_generation  |  boolean  | Allows some flexibility in the active/reactive power of conventional generators                                                                                                                                                                                                    |
-|       node_balance       |  boolean  | Enables/Disables softening nodal power balance constraints, helpful for feasibility testing                                                                                                                                                                                        |
+|        Parameter         | Data Type | Explanation                                                                                               |
+|:------------------------:|:---------:|:----------------------------------------------------------------------------------------------------------|
+|      grid_operation      |  boolean  | Enables/Disables Voltage limit violations and/or Branch flow limit violations                             |
+|       flexibility        |  boolean  | Enables/Disables daily energy balancing for flexible resources                                            |
+|           ess            |  boolean  | Enables/Disables and the relaxation of **daily energy balance** constraints in **energy storage systems** |
+|       node_balance       |  boolean  | Enables/Disables softening nodal power balance constraints (helpful for feasibility testing)              |
