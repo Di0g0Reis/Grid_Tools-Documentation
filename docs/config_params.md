@@ -48,7 +48,7 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 ````
 
 
-#### **Structure Breakdown**:
+#### **Structure Breakdown**
 
 |        Parameter        |    Data Type    | Explanation                                                                                                                                    |
 |:-----------------------:|:---------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------|
@@ -73,7 +73,7 @@ It's defined by a `.json` file named after the case, for example, `case9_params.
 
 Inside the ***slacks*** parameter resides the following:
 
-#### **Slacks**:
+#### **Slacks**
 
 |        Parameter         | Data Type | Explanation                                                                                               |
 |:------------------------:|:---------:|:----------------------------------------------------------------------------------------------------------|
