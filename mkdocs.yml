@@ -13,8 +13,8 @@ nav:
   - Getting Started: getting_started.md
   - Datastructures and Elements:
       - Datastructures and Elements: elements.md
-      - Topology of the electrical grid: topology.md
-      - Configuration parameters: config_params.md
+      - Topology of the Electrical Grid: topology.md
+      - Configuration Parameters: config_params.md
       - Production and Consumption data: prod_cons.md
       - Market data: market.md
       - Execution File: directory.md

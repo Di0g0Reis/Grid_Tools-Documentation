@@ -1,5 +1,5 @@
-This file defines the **network topology** of the electrical grid for a specific case. It describes how the various elements such as buses, generators, loads, lines, and transformers are connected. The data is organized in a structured `.json` format, with tables corresponding to each type of element.
-Each table has columns representing the parameters and rows corresponding to individual elements.
+This file defines the **network topology** of the electrical grid for a specific case. It describes how the various elements such as buses, generators, loads, lines, and transformers are connected.
+The data is organized in a structured `.json` format. This section contains tables corresponding to each type of element for better understanding.
 
 The system network is defined by a `.json` file named after the case, for example, `case9.json`.
 
@@ -14,6 +14,8 @@ This is exemplified here:
     ],
     "generators": [
         {"gen_id":1,"bus":1,"Pmax":80,"Pmin":0,"Qmax":150,"Qmin":-20,"Vg":1,"status":1, "type": "CONV", "ramp_rate":0.05},
+        {"gen_id":2,"bus":1,"Pmax":80,"Pmin":0,"Qmax":150,"Qmin":-20,"Vg":1,"status":1, "type": "WIND", "ramp_rate":0.05},
+        {"gen_id":3,"bus":1,"Pmax":80,"Pmin":0,"Qmax":150,"Qmin":-20,"Vg":1,"status":1, "type": "PV", "ramp_rate":0.05},
         ...
     ],
     "loads": [
@@ -31,12 +33,22 @@ This is exemplified here:
   	"energy_storage": [
 		{"es_id": 1, "bus": 1, "s": 10, "e": 20, "e_init": 10, "e_min": 1, "e_max": 19, "eff_ch": 0.95, "eff_dch": 0.95, "max_pf": 0.9, "min_pf": -0.9},
         ...
+    ],
+    "capacitor_banks": [
+		{"cap_bank_id": 1, "bus": 1, "Qnom": 10, "n_steps": 2, "n_init": 1, "status":  1},
+        ...
+    ],
+    "reactors": [
+		{"reactor_id": 1, "bus": 1, "Qnom": 10, "n_steps": 2, "n_init": 1, "status":  1},
+        ...
     ]
+  
+  
 }
 ````
 
 In short, you will need to provide the following parameters:
-#### **Buses (Nodes)**:
+#### **Buses (Nodes)**
 
 |  Parameter  |  Data Type  | Explanation                                       |
 |:-----------:|:-----------:|:--------------------------------------------------|
@@ -49,7 +61,7 @@ In short, you will need to provide the following parameters:
 |    Vmin     |    float    | Minimum voltage magnitude (p.u.)                  |
 
 
-#### **Generators**:
+#### **Generators**
 
 | Parameter | Data Type | Explanation                                                |
 |:---------:|:---------:|:-----------------------------------------------------------|
@@ -65,26 +77,11 @@ In short, you will need to provide the following parameters:
 | ramp_rate |   float   | Physical Ramp rate (P/min)                                 |
 
 !!! info 
-    Based on our investigation, we obtained ramp rate values corresponding to each generator type.
-    
-    | Generator - Fuel Type | Ramp rate (% P/min) | 
-    |:---------:|:---------:|
-    |  Coal  |  1 - 4  | 
-    |    Coal - **SOTA**    |  < 6  | 
-    |  Hydro   |  10 - 30  |
-    |  **Open Cycle** gas turbines   |  8 - 12  |
-    |  **Open Cycle** gas turbines - **SOTA**  |  < 15  | 
-    |  **Combined Cycle** gas turbines   |  2 - 4  |
-    |  **Combined Cycle** gas turbines - **SOTA**  |  8 - 10  |
-    |  Thermal (Poland)   |  2 - 6  |
-    |  Thermal (Denmark)   |  4  |
-    |  Thermal (Germany)   |  < 6  |
-    |  Nuclear   |  100  |
-    
-    With **SOTA** being State of the art.
+
+    The Generators ramp rate can be dictated by the user (as seen in the example above) or, if no value is given, than it is assumed a **5%** ramp rate for **conventional** generators and **10%** for **renewable** generators.
 
 
-####  **Loads**:
+####  **Loads**
 
 | Parameter | Data Type | Explanation                                                    |
 |:---------:|:---------:|:---------------------------------------------------------------|
@@ -94,7 +91,7 @@ In short, you will need to provide the following parameters:
 |  fl_reg   |  integer  | Indicates if the load is flexible, 1 - If it is, 0 - Otherwise |
 
 
-#### **Lines**:
+#### **Lines**
 
 | Parameter | Data Type | Explanation                                          |
 |:---------:|:---------:|:-----------------------------------------------------|
@@ -115,7 +112,7 @@ In short, you will need to provide the following parameters:
 
     **Transformers** are treated as branches in the system, with a few additional parameters. This is why their element table closely resembles the one used for **Lines**.
 
-#### **Transformers**:
+#### **Transformers**
 
 | Parameter | Data Type | Explanation                                                                                                                              |
 |:---------:|:---------:|:-----------------------------------------------------------------------------------------------------------------------------------------|
@@ -131,7 +128,7 @@ In short, you will need to provide the following parameters:
 | vmag_reg  |  integer  | Indicates if transformer has voltage magnitude regulation (1 - If it does)                                                               |
 
 
-#### **Energy Storage Systems**:
+#### **Energy Storage Systems**
 
 | Parameter | Data Type | Explanation                                                                                                      |
 |:---------:|:---------:|:-----------------------------------------------------------------------------------------------------------------|
@@ -146,3 +143,25 @@ In short, you will need to provide the following parameters:
 |  eff_dch  |   float   | Discharging efficiency (0 to 1, fraction of stored energy converted to output power)                             |
 |  max_pf   |   float   | Maximum power factor (leading/lagging) allowed when operating — defines reactive power capability limit (0 to 1) |
 |  min_pf   |   float   | Minimum power factor (0 to 1)                                                                                    |
+
+#### **Capacitor Banks**
+
+|  Parameter  | Data Type | Explanation                                                              |
+|:-----------:|:---------:|:-------------------------------------------------------------------------|
+| cap_bank_id |  integer  | Capacitor Bank identifier                                                |
+|    bus_i    |  integer  | Bus number (positive integer)                                            |
+|    Qnom     |   float   | Nominal reactive power (MVar)                                            |
+|   n_steps   |   float   | Number of taps                                                           |
+|   n_init    |   float   | Initial tap position                                                     |
+|   status    |  integer  | Status: 1 - Capacitor Bank in service; 0 - Capacitor Bank out of service |
+
+#### **Reactors**
+
+| Parameter  | Data Type | Explanation                                                |
+|:----------:|:---------:|:-----------------------------------------------------------|
+| reactor_id |  integer  | Capacitor Bank identifier                                  |
+|   bus_i    |  integer  | Bus number (positive integer)                              |
+|    Qnom    |   float   | Nominal reactive power (MVar)                              |
+|  n_steps   |   float   | Number of taps                                             |
+|   n_init   |   float   | Initial tap position                                       |
+|   status   |  integer  | Status: 1 - Reactor in service; 0 - Reactor out of service |
